@@ -1,0 +1,74 @@
+﻿<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <edmx:DataServices xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" m:DataServiceVersion="1.0">
+    <Schema Namespace="Model" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <EntityType Name="Engine">
+        <Key>
+          <PropertyRef Name="Id" />
+        </Key>
+        <Property Name="Id" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="Horsepower" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Cylinders" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="PurchasedCars" Relationship="Model.FK_PurchasedCar_Engine" FromRole="Engine" ToRole="PurchasedCar" />
+      </EntityType>
+      <EntityType Name="PurchasedCar">
+        <Key>
+          <PropertyRef Name="Id" />
+        </Key>
+        <Property Name="Id" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="CustomerName" Type="Edm.String" Nullable="true" MaxLength="50" Unicode="true" FixedLength="false" />
+        <Property Name="EngineId" Type="Edm.Int32" Nullable="false" />
+        <Property Name="TireId" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="Engine" Relationship="Model.FK_PurchasedCar_Engine" FromRole="PurchasedCar" ToRole="Engine" />
+        <NavigationProperty Name="Tires" Relationship="Model.FK_PurchasedCar_Tire" FromRole="PurchasedCar" ToRole="Tire" />
+      </EntityType>
+      <EntityType Name="TirePackage">
+        <Key>
+          <PropertyRef Name="Id" />
+        </Key>
+        <Property Name="Id" Type="Edm.Int32" Nullable="false" p8:StoreGeneratedPattern="Identity" xmlns:p8="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+        <Property Name="Size" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Weight" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="PurchasedCars" Relationship="Model.FK_PurchasedCar_Tire" FromRole="Tire" ToRole="PurchasedCar" />
+      </EntityType>
+      <Association Name="FK_PurchasedCar_Engine">
+        <End Role="Engine" Type="Model.Engine" Multiplicity="1" />
+        <End Role="PurchasedCar" Type="Model.PurchasedCar" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Engine">
+            <PropertyRef Name="Id" />
+          </Principal>
+          <Dependent Role="PurchasedCar">
+            <PropertyRef Name="EngineId" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="FK_PurchasedCar_Tire">
+        <End Role="Tire" Type="Model.TirePackage" Multiplicity="1" />
+        <End Role="PurchasedCar" Type="Model.PurchasedCar" Multiplicity="*" />
+        <ReferentialConstraint>
+          <Principal Role="Tire">
+            <PropertyRef Name="Id" />
+          </Principal>
+          <Dependent Role="PurchasedCar">
+            <PropertyRef Name="TireId" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+    </Schema>
+    <Schema Namespace="Service" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <EntityContainer Name="Entities" p7:LazyLoadingEnabled="true" m:IsDefaultEntityContainer="true" xmlns:p7="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntitySet Name="Engines" EntityType="Model.Engine" />
+        <EntitySet Name="PurchasedCars" EntityType="Model.PurchasedCar" />
+        <EntitySet Name="TirePackages" EntityType="Model.TirePackage" />
+        <AssociationSet Name="FK_PurchasedCar_Engine" Association="Model.FK_PurchasedCar_Engine">
+          <End Role="Engine" EntitySet="Engines" />
+          <End Role="PurchasedCar" EntitySet="PurchasedCars" />
+        </AssociationSet>
+        <AssociationSet Name="FK_PurchasedCar_Tire" Association="Model.FK_PurchasedCar_Tire">
+          <End Role="Tire" EntitySet="TirePackages" />
+          <End Role="PurchasedCar" EntitySet="PurchasedCars" />
+        </AssociationSet>
+      </EntityContainer>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>

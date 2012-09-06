@@ -1,0 +1,211 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Model.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="ModelStoreContainer">
+          <EntitySet Name="Engine" EntityType="Model.Store.Engine" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="PurchasedCar" EntityType="Model.Store.PurchasedCar" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Tire" EntityType="Model.Store.Tire" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_PurchasedCar_Engine" Association="Model.Store.FK_PurchasedCar_Engine">
+            <End Role="Engine" EntitySet="Engine" />
+            <End Role="PurchasedCar" EntitySet="PurchasedCar" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchasedCar_Tire" Association="Model.Store.FK_PurchasedCar_Tire">
+            <End Role="Tire" EntitySet="Tire" />
+            <End Role="PurchasedCar" EntitySet="PurchasedCar" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Engine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Horsepower" Type="int" Nullable="false" />
+          <Property Name="Cylinders" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PurchasedCar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EngineId" Type="int" Nullable="false" />
+          <Property Name="TireId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tire">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Size" Type="int" Nullable="false" />
+          <Property Name="Weight" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_PurchasedCar_Engine">
+          <End Role="Engine" Type="Model.Store.Engine" Multiplicity="1" />
+          <End Role="PurchasedCar" Type="Model.Store.PurchasedCar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Engine">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PurchasedCar">
+              <PropertyRef Name="EngineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchasedCar_Tire">
+          <End Role="Tire" Type="Model.Store.Tire" Multiplicity="1" />
+          <End Role="PurchasedCar" Type="Model.Store.PurchasedCar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tire">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PurchasedCar">
+              <PropertyRef Name="TireId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Engines" EntityType="Model.Engine" />
+          <EntitySet Name="PurchasedCars" EntityType="Model.PurchasedCar" />
+          <EntitySet Name="TirePackages" EntityType="Model.TirePackage" />
+          <AssociationSet Name="FK_PurchasedCar_Engine" Association="Model.FK_PurchasedCar_Engine">
+            <End Role="Engine" EntitySet="Engines" />
+            <End Role="PurchasedCar" EntitySet="PurchasedCars" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PurchasedCar_Tire" Association="Model.FK_PurchasedCar_Tire">
+            <End Role="Tire" EntitySet="TirePackages" />
+            <End Role="PurchasedCar" EntitySet="PurchasedCars" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Engine">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Horsepower" Type="Int32" Nullable="false" />
+          <Property Name="Cylinders" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PurchasedCars" Relationship="Model.FK_PurchasedCar_Engine" FromRole="Engine" ToRole="PurchasedCar" />
+        </EntityType>
+        <EntityType Name="PurchasedCar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="EngineId" Type="Int32" Nullable="false" />
+          <Property Name="TireId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Engine" Relationship="Model.FK_PurchasedCar_Engine" FromRole="PurchasedCar" ToRole="Engine" />
+          <NavigationProperty Name="Tires" Relationship="Model.FK_PurchasedCar_Tire" FromRole="PurchasedCar" ToRole="Tire" />
+        </EntityType>
+        <EntityType Name="TirePackage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Size" Type="Int32" Nullable="false" />
+          <Property Name="Weight" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="PurchasedCars" Relationship="Model.FK_PurchasedCar_Tire" FromRole="Tire" ToRole="PurchasedCar" />
+        </EntityType>
+        <Association Name="FK_PurchasedCar_Engine">
+          <End Role="Engine" Type="Model.Engine" Multiplicity="1" />
+          <End Role="PurchasedCar" Type="Model.PurchasedCar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Engine">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PurchasedCar">
+              <PropertyRef Name="EngineId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PurchasedCar_Tire">
+          <End Role="Tire" Type="Model.TirePackage" Multiplicity="1" />
+          <End Role="PurchasedCar" Type="Model.PurchasedCar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tire">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PurchasedCar">
+              <PropertyRef Name="TireId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="Engines">
+            <EntityTypeMapping TypeName="Model.Engine">
+              <MappingFragment StoreEntitySet="Engine">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Horsepower" ColumnName="Horsepower" />
+                <ScalarProperty Name="Cylinders" ColumnName="Cylinders" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PurchasedCars">
+            <EntityTypeMapping TypeName="Model.PurchasedCar">
+              <MappingFragment StoreEntitySet="PurchasedCar">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="EngineId" ColumnName="EngineId" />
+                <ScalarProperty Name="TireId" ColumnName="TireId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TirePackages">
+            <EntityTypeMapping TypeName="Model.TirePackage">
+              <MappingFragment StoreEntitySet="Tire">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Model1">
+        <EntityTypeShape EntityType="Model.Engine" Width="1.5" PointX="0.75" PointY="1.125" Height="1.7879850260416672" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.PurchasedCar" Width="1.5" PointX="3" PointY="0.875" Height="2.1725878906249996" IsExpanded="true" />
+        <EntityTypeShape EntityType="Model.TirePackage" Width="1.5" PointX="0.75" PointY="5.125" Height="1.7879850260416657" IsExpanded="true" />
+        <AssociationConnector Association="Model.FK_PurchasedCar_Engine" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="2.0189925130208337" />
+          <ConnectorPoint PointX="3" PointY="2.0189925130208337" />
+        </AssociationConnector>
+        <AssociationConnector Association="Model.FK_PurchasedCar_Tire" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="6.0189925130208328" />
+          <ConnectorPoint PointX="3.75" PointY="6.0189925130208328" />
+          <ConnectorPoint PointX="3.75" PointY="3.0475878906249996" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
